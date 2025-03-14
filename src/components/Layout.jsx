@@ -5,10 +5,12 @@ import { IoIosExit, IoIosNotifications } from "react-icons/io";
 import { GoHomeFill } from "react-icons/go";
 import { HiMiniUserGroup } from "react-icons/hi2";
 import { FaGear } from "react-icons/fa6";
+import { api } from "../service/api";
+import { useNavigate } from "react-router-dom";
 
 
 function Layout({children}) {
-    const [isOpen, setIsOpen] = useState(true)
+    const [isOpen, setIsOpen] = useState(false)
 
     return (
         <div className="flex flex-col h-screen relative">
@@ -67,6 +69,7 @@ function SidebarBox({children}) {
 
 function UserDropDown({ isOpen, setIsOpen }) {
     const dropDownRef = useRef(null)
+    const navigate = useNavigate()
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -78,13 +81,25 @@ function UserDropDown({ isOpen, setIsOpen }) {
         return () => document.removeEventListener('mousedown', handleClickOutside)
     }, [setIsOpen])
 
+    const handleLogout = () => {
+        api.post("/logout")
+        .then(function (response) {
+            localStorage.removeItem('TOKEN')
+            navigate('/login')
+        }).catch(function(error){
+            console.error('Error:', error)
+        })
+    }
+
     return (
         <>
             {isOpen ? (
-                <div ref={dropDownRef} className="absolute right-0  top-16 w-32.5">
-                    <UserDropDownBox>
-                        <span>Log Out</span>
-                        <IoIosExit className="h-5 w-5" />
+                <div ref={dropDownRef} className="absolute right-0  top-16 w-33.5">
+                    <UserDropDownBox> 
+                        <button type="button" onClick={handleLogout} className="flex items-center justify-center hover:cursor-pointer ">
+                            <span className="mr-3">Log Out</span>
+                            <IoIosExit className="h-5 w-5" />
+                        </button>
                     </UserDropDownBox>
                     <UserDropDownBox>
                         <span>Setting</span>

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import LogoPlaceholder from "../../assets/logoipsum-261.svg"
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
+import { api } from "../../service/api";
 
 
 
@@ -14,9 +15,9 @@ function AuthLayout( {children} ) {
                     <img src={LogoPlaceholder} alt="Logo" />
                 </div>
                     {children}
-                <div className="">
+                <div className="mb-4">
                     <p className="text-center text-xs text-gray-400">
-                        By continuing you accept the <u className="cursor-pointer hover:text-gray-600">Regulations</u> and the<br/>
+                        By continuing you accept the {' '} <u className="cursor-pointer hover:text-gray-600">Regulations</u> and the<br/>
                         <u className="cursor-pointer hover:text-gray-600">Privacy Policy</u>
                     </p>
                 </div>
@@ -33,8 +34,22 @@ export function Login() {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log('Email:', email)
-        console.log('Password', password)
+        api.post('/login', {
+            email: email,
+            password: password,
+            device_name: navigator.userAgent
+        })
+        .then(function (response) {
+            localStorage.setItem('TOKEN', response.data.data)
+            navigate('/dashboard')
+            
+            setPasswordVisible(false)
+            setEmail("")
+            setPassword("")
+        })
+        .catch(function (error){
+            console.error('Error: ', error)
+        }) 
 
     }
 
