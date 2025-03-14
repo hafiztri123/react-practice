@@ -9,7 +9,7 @@ import { api } from "../service/api";
 import { useNavigate } from "react-router-dom";
 
 
-function Layout({children}) {
+function DashboardLayout({children}) {
     const [isOpen, setIsOpen] = useState(false)
 
     return (
@@ -120,4 +120,4 @@ function UserDropDownBox({children}) {
     )
 }
 
-export default Layout
+export default DashboardLayout
