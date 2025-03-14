@@ -4,12 +4,16 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Layout from './components/Layout'
+import { Login, Register } from './components/Auth/Auth'
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout/>}/>
+        <Route path="/login" element={<Login/>} />
+        <Route path="/register" element={<Register/>} />
+
       </Routes>
     </BrowserRouter>
   )
