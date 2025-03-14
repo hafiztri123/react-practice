@@ -5,15 +5,19 @@ import './App.css'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Layout from './components/Layout'
 import { Login, Register } from './components/Auth/Auth'
+import ProtectedRoutes from './route/ProtectedRoute'
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/dashboard" element={<Layout/>}/>
         <Route path="/login" element={<Login/>} />
         <Route path="/register" element={<Register/>} />
 
+        <Route element={<ProtectedRoutes/>}>
+          <Route path="/dashboard" element={<Layout />} />
+        </Route>
+        
       </Routes>
     </BrowserRouter>
   )
