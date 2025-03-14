@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import LogoPlaceholder from "../../assets/logoipsum-261.svg"
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -28,6 +29,7 @@ export function Login() {
     const [isPasswordVisible, setPasswordVisible] = useState(false)
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const navigate = useNavigate()
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -71,7 +73,7 @@ export function Login() {
                             Sign In
                         </button>
                     </form>
-                    <p className="text-center text-xs text-gray-400 mt-4 hover:text-gray-600 hover:cursor-pointer">Forgot Password?</p>
+                    <p className="text-center text-xs text-gray-400 mt-4 hover:text-gray-600 hover:cursor-pointer" onClick={() => navigate("/register")}>Didn't have an account? <u>Sign Up</u></p>
                 </div>
             </div>
         </AuthLayout>
@@ -84,6 +86,7 @@ export function Register(){
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
+    const navigate = useNavigate()
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -151,7 +154,7 @@ export function Register(){
                             Sign Up
                         </button>
                     </form>
-                    <p className="text-center text-xs text-gray-400 mt-4 hover:text-gray-600 hover:cursor-pointer">Have an account? <u>Sign In</u></p>
+                    <p className="text-center text-xs text-gray-400 mt-4 hover:text-gray-600 hover:cursor-pointer">Have an account? <u onClick={() => navigate("/login")}>Sign In</u></p>
                 </div>
             </div>
         </AuthLayout>
