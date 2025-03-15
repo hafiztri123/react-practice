@@ -4,6 +4,7 @@ import { api } from "../../service/api"
 import AuthLayout from "./AuthLayout"
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5"
 import { toast } from "react-toastify"
+import { AiOutlineLoading } from "react-icons/ai"
 
 
 
@@ -11,6 +12,7 @@ export default function Login() {
     const [isPasswordVisible, setPasswordVisible] = useState(false)
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate()
 
         const loginSuccess = (message) => toast.success(message, {
@@ -24,6 +26,7 @@ export default function Login() {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        setIsLoading(true)
         await api.post('/login', {
             email: email,
             password: password,
@@ -31,14 +34,16 @@ export default function Login() {
         })
             .then(function (response) {
                 localStorage.setItem('TOKEN', response.data.data)
-                navigate('/dashboard')
-
                 setPasswordVisible(false)
                 setEmail("")
                 setPassword("")
+                setIsLoading(false)
+                navigate('/')
+
             })
             .catch(function (error) {
                 loginFailed(error.response?.data?.message)
+                setIsLoading(false)
             })
 
     }
@@ -72,10 +77,12 @@ export default function Login() {
                             </button>
                         </div>
                         <button
-                            className="border w-full text-center p-4 rounded-lg bg-indigo-500 hover:bg-indigo-700 hover:cursor-pointer text-white"
+                            className="border w-full text-center p-4 rounded-lg bg-indigo-500 hover:bg-indigo-700 hover:cursor-pointer text-white flex items-center justify-center"
                             type="submit"
                         >
-                            Sign In
+                            {isLoading ? (
+                                <AiOutlineLoading className="w-4 h-4 animate-spin text-center"/>
+                            ): <>Sign In</>}
                         </button>
                     </form>
                     <p className="text-center text-xs text-gray-400 mt-4 hover:text-gray-600 hover:cursor-pointer" onClick={() => navigate("/register")}>Didn't have an account? <u>Sign Up</u></p>

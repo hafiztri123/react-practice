@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom"
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5"
 import { api } from "../../service/api"
 import { ToastContainer, toast } from "react-toastify"
+import { AiOutlineLoading } from "react-icons/ai"
 
 export default function Register() {
     const [isPasswordVisible, setPasswordVisible] = useState(false)
@@ -12,6 +13,7 @@ export default function Register() {
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
     const navigate = useNavigate()
+    const [isLoading, setIsLoading] = useState(false)
 
     const registerSuccess = (message) => toast.success(message, {
         className: "text-xs"
@@ -23,6 +25,7 @@ export default function Register() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true)
         try {
             const response = await api.post('/register', {
                 name: name,
@@ -36,12 +39,14 @@ export default function Register() {
             setEmail("");
             setPassword("");
             setConfirmPassword("");
+            setIsLoading(false)
 
             navigate('/login');
         } catch (error) {
 
             const errorMessage = error.response?.data?.message || "Registration failed. Please try again.";
             registerFailed(errorMessage);
+            setIsLoading(false)
         }
     };
 
@@ -93,10 +98,12 @@ export default function Register() {
                         />
 
                         <button
-                            className="border w-full text-center p-4 rounded-lg bg-indigo-500 hover:bg-indigo-700 hover:cursor-pointer text-white"
+                            className="border w-full text-center p-4 rounded-lg bg-indigo-500 hover:bg-indigo-700 hover:cursor-pointer text-white flex items-center justify-center"
                             type="submit"
                         >
-                            Sign Up
+                            {isLoading ? (
+                                <AiOutlineLoading className="w-4 h-4 animate-spin text-center"/>
+                            ): <>Sign Up</>}
                         </button>
                     </form>
                     <p className="text-center text-xs text-gray-400 mt-4 hover:text-gray-600 hover:cursor-pointer">Have an account? <u onClick={() => navigate("/login")}>Sign In</u></p>
