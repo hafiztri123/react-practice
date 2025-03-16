@@ -59,7 +59,7 @@ export default function Login() {
                 <div className="mt-8">
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <input type="email"
-                            className="border border-gray-400 w-full rounded-lg p-3 focus:outline-none hover:border-indigo-600"
+                            className="border border-gray-400 w-full rounded-lg p-3 focus:outline-none hover:border-indigo-600 focus:border-indigo-600"
                             placeholder="Email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
@@ -67,7 +67,7 @@ export default function Login() {
                         <div className="relative">
                             <input
                                 type={isPasswordVisible ? "text" : "password"}
-                                className="border border-gray-400 w-full rounded-lg p-3 focus:outline-none hover:border-indigo-600 pr-12"
+                                className="border border-gray-400 w-full rounded-lg p-3 focus:outline-none hover:border-indigo-600 focus:border-indigo-600 pr-12"
                                 placeholder="Password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}

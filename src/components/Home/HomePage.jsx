@@ -17,18 +17,6 @@ export default function HomePage() {
     const [sortDirection, setSortDirection] = useState("")
 
 
-    // useEffect(() => {
-    //     api.get(`/candidates?page=${candidateDataPage}`)
-    //         .then(function (response) {
-    //             setCandidateData(response.data.data)
-    //             setMetaDataCandidatePage(response.data.meta)
-    //             setInputPage("")
-
-    //         })
-    //         .catch(function (error) {
-    //             console.error(error)
-    //         })
-    // }, [candidateDataPage])
 
     useEffect(() => {
         let baseSearch = '/search/candidates?'
@@ -132,7 +120,7 @@ export default function HomePage() {
 
                     {candidateData && candidateData.length > 0 ? (
                         candidateData.map((candidate) => (
-                            <>
+                            <React.Fragment key={candidate.id}>
                                 <TableCell text={candidate.name} />
                                 <TableCell text={candidate.email} />
                                 <TableCell text={candidate.phone} />
@@ -141,7 +129,7 @@ export default function HomePage() {
                                 <TableCell text={candidate.current_position} />
                                 <TableCell text={candidate.education} />
                                 <TableCell text={candidate.status} />
-                            </>
+                            </React.Fragment>
 
                         ))
                     ) : (
@@ -187,7 +175,7 @@ export default function HomePage() {
 
 function TableHeader({ text }) {
     return (
-        <div className="border p-4 bg-indigo-400 text-white font-semibold rounded-md">
+        <div className="border p-4 bg-indigo-400 text-white font-semibold rounded-md shadow-md">
             {text}
         </div>
     );
@@ -195,7 +183,7 @@ function TableHeader({ text }) {
 
 function TableCell({ text }) {
     return (
-        <div className="rounded-md bg-indigo-200 text-gray-800 whitespace-normal break-words p-4">
+        <div className="rounded-md bg-indigo-200 text-gray-800 whitespace-normal break-words p-4 shadow-md">
             {text || "-"}
         </div>
     );
@@ -216,7 +204,7 @@ function Filter({ isFilterOpen, setFilterOpen, searchQuery, SearchQueryChange, s
                         onClick={() => setFilterOpen(!isFilterOpen)}
                         className="ml-4 border-2 border-gray-300 p-2 rounded-md bg-indigo-100 hover:bg-indigo-200"
                     >
-                        <IoFilterOutline className={`w-5 h-5 transition-transform duration-300 ${isFilterOpen ? "rotate-180" : ""}`} />
+                        <IoFilterOutline className={`w-5 h-5 transition-transform duration-300 ${!isFilterOpen ? "rotate-180" : ""}`} />
 
                     </button>
                 </div>
@@ -238,7 +226,7 @@ function SearchFilter({ isOpen, StatusQuery, handleStatusQuery, sortBy, handleSo
     return (
         <>
         {isOpen ? (
-                <div className="absolute border p-4 w-fit bg-indigo-100 rounded-md top-16">
+                <div className="absolute border     p-4 w-fit bg-indigo-100 rounded-md top-16">
                     <div className="flex flex-col space-y-4">
                         <div className="flex items-center justify-center ">
                             <span className="min-w-[80px] whitespace-nowrap">Status</span>

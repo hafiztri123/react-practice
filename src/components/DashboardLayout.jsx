@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { FaCalendarAlt, FaCaretDown, FaCaretUp } from "react-icons/fa";
+import { FaCalendarAlt, FaCaretDown, FaCaretUp, FaPlus } from "react-icons/fa";
 import PeoplePlaceholder from "../assets/people.png"
 import { IoIosExit, IoIosNotifications } from "react-icons/io";
 import { GoHomeFill } from "react-icons/go";
@@ -13,10 +13,10 @@ import ClickAwayListener from "react-click-away-listener";
 
 function DashboardLayout({children}) {
     const [isOpen, setIsOpen] = useState(false)
-    const { user } = useUser()
+    const { user, logout, isLoading: isProfileLoading  } = useUser()
     const [isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate()
-    const { logout } = useUser()    
+
 
 
 
@@ -34,7 +34,7 @@ function DashboardLayout({children}) {
                 </div>
                 <div className="flex items-center justify-center gap-x-2 mr-4 relative">
                     <img src={PeoplePlaceholder} alt="Profile icon" className="w-8 h-8 rounded-md" />
-                    <span className="hidden md:block">{user?.name}</span>
+                    <span className="hidden md:block">{isProfileLoading ? "Loading..." : user?.name }</span>
                     <button
                         type="button"
                         onClick={(e) => {
@@ -59,12 +59,16 @@ function DashboardLayout({children}) {
             />
             <div className="flex h-full ">
                 <div className="flex flex-col w-24">
-                    <SidebarBox>
-                        <GoHomeFill className="h-6 w-6"/>
-                    </SidebarBox>
-                    <SidebarBox>
-                        <HiMiniUserGroup className="h-6 w-6" />
-                    </SidebarBox>
+                    <button type="button" onClick={() => navigate('/')}>
+                        <SidebarBox>
+                            <GoHomeFill className="h-6 w-6" />
+                        </SidebarBox>
+                    </button>
+                    <button type="button" onClick={() => navigate('/add-candidate')}>
+                        <SidebarBox>
+                            <FaPlus className="h-6 w-6" />
+                        </SidebarBox>
+                    </button>
                     <SidebarBox>
                         <FaCalendarAlt className="h-6 w-6" />
                     </SidebarBox>

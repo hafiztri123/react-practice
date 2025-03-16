@@ -9,18 +9,22 @@ export const useUser = () => useContext(UserContext)
 
 export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null)
+    const [isLoading, setLoading] = useState(false)
 
     useEffect(() => {
-        const fetchUser = async () => {
-            await api.get('/me')
+        setLoading(true)
+        const fetchUser = () => {
+            api.get('/me')
             .then(function(response) {
                 const user = response.data.data
                 setUser(user)
+                setLoading(false)
                 
             })
             .catch(function(error) {
+                setLoading(false)
+                if (!user) setUser(null)
                 console.error(error.response?.data?.message)
-                setUser(null)
             })
         }
 
@@ -38,7 +42,7 @@ export const UserProvider = ({ children }) => {
     }
 
     return (
-        <UserContext.Provider value={{ user, setUser, logout}}>
+        <UserContext.Provider value={{ user, setUser, logout, isLoading, setLoading }}>
             {children}
         </UserContext.Provider>
     )

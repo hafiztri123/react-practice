@@ -9,6 +9,7 @@ import Register from './components/Auth/Register'
 import DashboardLayout from './components/DashboardLayout'
 import { ToastContainer } from 'react-toastify'
 import HomePage from '../src/components/Home/HomePage'
+import AddCandidate from './components/Candidate/AddCandidate'
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route element={<ProtectedRoutes/>}>
           <Route element={<DashboardLayout><Outlet/></DashboardLayout>}>
             <Route path='/' element={<HomePage/>}/>
+            <Route path='/add-candidate' element={<AddCandidate/>}/>
 
           </Route>
         </Route>
