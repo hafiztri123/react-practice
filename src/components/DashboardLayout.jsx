@@ -13,6 +13,7 @@ import { toast } from 'react-toastify'
 import { IoChevronBack } from "react-icons/io5";
 
 
+
 function DashboardLayout({children}) {
     const [isOpen, setIsOpen] = useState(false)
     const { user, logout, isLoading: isProfileLoading  } = useUser()
@@ -49,7 +50,7 @@ function DashboardLayout({children}) {
             .catch(function(error){
                 console.log(error.response?.data?.message)
             })
-    }, [isMarkAsRead, NotitificationNumber, NotificationCurrentPage])
+    }, [isMarkAsRead, NotificationCurrentPage])
 
     const MarkAsRead = (id) => {
         api.post(`/notifications/${id}/read`)
@@ -97,7 +98,7 @@ function DashboardLayout({children}) {
                     <IoIosNotifications className="w-8 h-8 hover:cursor-pointer" />
                         {user?.unread_notification > 0 && (
                             <div className="absolute bg-indigo-400 rounded-full w-4 h-4 -top-1 right-0 text-xs flex text-white items-center justify-center">
-                                {NotitificationNumber}
+                                {user?.unread_notification}
                             </div>
                         )}
                         {isNotificationOpen && <Notification 
