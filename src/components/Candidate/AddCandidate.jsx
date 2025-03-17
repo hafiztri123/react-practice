@@ -68,9 +68,14 @@ export default function AddCandidate(){
                 setLoading(false)
                 failedResponse("Failed Adding Candidate")
                 const errorArray = error.response?.data?.errors 
+
+                const newErrorState = { ...isError };
                 Object.keys(isError).forEach((key) => {
-                    setIsError((prev) => ({...prev, [key]: errorArray[key][0]}))
-                })
+                    if (errorArray[key]) {
+                        newErrorState[key] = errorArray[key][0];
+                    }
+                });
+                setIsError(newErrorState);
             })
     }
 

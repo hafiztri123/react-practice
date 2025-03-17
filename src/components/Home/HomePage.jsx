@@ -4,6 +4,8 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa"
 import { IoFilterOutline } from "react-icons/io5"
 import _ from "lodash"
 import ClickAwayListener from "react-click-away-listener"
+import { MdDeleteForever } from "react-icons/md"
+import { toast } from "react-toastify"
 
 export default function HomePage() {
     const [candidateData, setCandidateData] = useState(null)
@@ -15,6 +17,27 @@ export default function HomePage() {
     const [statusQuery, setStatusQuery] = useState("")
     const [sortBy, setSortBy] = useState("")
     const [sortDirection, setSortDirection] = useState("")
+    const [shouldFetchNextPage, setShouldFetchNextPage] = useState(false)
+    const [deleteLoading, setDeleteLoading] = useState(false)
+    const [deletedCandidateID, setDeleteCandidateID] = useState("")
+
+    useEffect(() => {
+        if(candidateData && candidateData.length < 5) {
+            setShouldFetchNextPage(true)
+        } else {
+            setShouldFetchNextPage(false)
+        }
+    }, [candidateData])
+
+    const responseSuccess = (message) => toast.success(message, {
+        className: "text-xs",
+        autoClose: 250
+    })
+            
+    const responseFailed = (message) => toast.error(message, {
+        className: "text-xs"
+    })
+        
 
 
 
@@ -50,7 +73,26 @@ export default function HomePage() {
             .catch(function (error) {
                 console.error(error)
             })
-    }, [searchQuery, statusQuery, sortBy, sortDirection, candidateDataPage])
+    }, [searchQuery, statusQuery, sortBy, sortDirection, candidateDataPage, shouldFetchNextPage])
+
+    const handleCandidateDelete = (id) => {
+        setDeleteLoading(true)
+        setDeleteCandidateID(id)
+        api.delete(`candidates/${id}`)
+            .then(function(response){
+                responseSuccess('Candidate deleted')
+                setCandidateData((prevData) => prevData.filter(candidate=>candidate.id !== id))
+                setDeleteCandidateID("")
+                setDeleteLoading(false)
+
+            })
+            .catch(function(response){
+                responseFailed('Failed to delete candidate')
+                setDeleteCandidateID("")
+                setDeleteLoading(false)
+
+            })
+    }
 
 
 
@@ -107,7 +149,7 @@ export default function HomePage() {
             />
             {/* Table container with fixed height and scrolling */}
             <div className="flex-grow overflow-auto min-h-[300px]"> 
-                <div className="grid grid-cols-8 gap-2">
+                <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr_auto] gap-2">
                     {/* Table Headers */}
                     <TableHeader text="Name" />
                     <TableHeader text="Email" />
@@ -117,6 +159,10 @@ export default function HomePage() {
                     <TableHeader text="Current Position" />
                     <TableHeader text="Education" />
                     <TableHeader text="Status" />
+                    <div className="border p-4 bg-gray-600 text-white font-semibold rounded-md shadow-md">
+                        Delete
+                    </div>
+
 
                     {candidateData && candidateData.length > 0 ? (
                         candidateData.map((candidate) => (
@@ -129,6 +175,14 @@ export default function HomePage() {
                                 <TableCell text={candidate.current_position} />
                                 <TableCell text={candidate.education} />
                                 <TableCell text={candidate.status} />
+                                <div className={`rounded-md bg-red-400 text-white whitespace-normal break-words p-4 shadow-md w-20 flex items-center justify-center hover:bg-red-500 ${deleteLoading ? "cursor-progress" : "active:bg-red-600" }`} onClick={() => (deletedCandidateID !== candidate.id) && handleCandidateDelete(candidate.id)} >
+                                    {deleteLoading && deletedCandidateID === candidate.id  ? (
+                                        <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-white"/>
+                                    ): (
+                                            <MdDeleteForever className="w-6 h-6" />
+                                    )}
+
+                                </div>
                             </React.Fragment>
 
                         ))
@@ -183,7 +237,7 @@ function TableHeader({ text }) {
 
 function TableCell({ text }) {
     return (
-        <div className="rounded-md bg-indigo-200 text-gray-800 whitespace-normal break-words p-4 shadow-md">
+        <div className="rounded-md bg-indigo-200 text-gray-800 whitespace-normal break-words pt-4 pl-4 pr-4 pb-5 shadow-md h-16 overflow-auto">
             {text || "-"}
         </div>
     );
